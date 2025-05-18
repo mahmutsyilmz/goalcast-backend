@@ -26,7 +26,7 @@ jobs:
           distribution: 'temurin'
           cache: maven # Maven bağımlılıklarını cache'ler
 
-      - name: Build and Test with Maven # Testleri artık çalıştırmayı hedefliyoruz
+      - name: Build and Test with Maven
         run: mvn -B package --file pom.xml -Dspring.profiles.active=test
 
       - name: Log in to Azure Container Registry

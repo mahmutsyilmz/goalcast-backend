@@ -1,0 +1,69 @@
+name: Backend CI/CD GoalCast (Azure)
+
+on:
+  push:
+    branches: [ main ] # Sadece 'main' branch'ine push yapıldığında çalışsın
+  workflow_dispatch: # Manuel olarak tetikleme imkanı da ekleyelim
+
+env:
+  # Bu değerleri kendi Azure kaynak adlarınızla değiştirin
+  AZURE_WEBAPP_NAME: goalcast-api                 # FAZ 3'te oluşturduğunuz App Service adı
+  AZURE_CONTAINER_REGISTRY_NAME: goalcastregistry # FAZ 2'de oluşturduğunuz ACR adı (sadece adı, .azurecr.io olmadan)
+  IMAGE_NAME: goalcast-backend                    # Docker imajınızın adı (ACR'deki)
+
+jobs:
+  build-test-and-push-to-acr:
+    name: Build, Test, and Push to ACR
+    runs-on: ubuntu-latest # GitHub Actions'ın çalışacağı sanal makine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Kodunuzu çeker
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven # Maven bağımlılıklarını cache'ler
+
+      - name: Build and Test with Maven
+        run: mvn -B package --file pom.xml # -B batch mode, testleri de çalıştırır
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io # ACR login sunucunuz
+          username: ${{ secrets.ACR_USERNAME }} # GitHub Secrets'tan gelecek
+          password: ${{ secrets.ACR_PASSWORD }} # GitHub Secrets'tan gelecek
+
+      - name: Build and push Docker image to ACR
+        run: |
+          docker build . --file Dockerfile --tag ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }} --tag ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+
+  deploy-to-azure-webapp:
+    name: Deploy to Azure Web App
+    needs: build-test-and-push-to-acr # Önceki job başarılı olmalı
+    runs-on: ubuntu-latest
+    environment: production # Ortam bazlı secret'lar için (opsiyonel)
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }} # GitHub Secrets'tan gelecek
+
+      - name: Deploy to Azure Web App for Containers
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          images: '${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}'
+          # App Service'in yeni imajı çekmesini sağlamak için bir ayar değişikliği yapabiliriz (opsiyonel)
+          # Bu action zaten imajı günceller ve App Service'i yeniden başlatarak yeni imajı almasını tetikler.
+
+      - name: Logout from Azure
+        run: |
+          az logout
+          az cache purge
+          az account clear
+        if: always() # Her zaman çalışsın (başarılı veya başarısız olsa da)

@@ -1,0 +1,10 @@
+.git
+.gitignore
+target/
+.idea/
+*.iml
+.vscode/
+mvnw
+mvnw.cmd
+HELP.md
+# Log dosyaları veya yerel konfigürasyonlar varsa onları da ekleyin

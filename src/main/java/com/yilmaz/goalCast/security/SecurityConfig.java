@@ -41,6 +41,7 @@ public class SecurityConfig {
             "/webjars/**",
             "/v2/api-docs/**",
             "/api-docs/**",
+            "/api/leaderboard/**", // Leaderboard endpoint'i
     };
 
 

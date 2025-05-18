@@ -1,0 +1,40 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# Eclipse
+.settings/
+.project
+.classpath
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+.nb-gradle/
+# VS Code
+.vscode/
+# Log files
+*.log
+# Application properties (Eğer hassas bilgiler içeriyorsa ve ortam değişkenleriyle yönetilecekse)
+# Eğer application.properties sadece varsayılanlar içeriyorsa ve hassas bilgiler ortam değişkenleriyle override edilecekse, ignore etmeyebilirsiniz.
+# Ancak canlı ortam şifrelerini asla koda commit etmeyin.
+# src/main/resources/application.properties 
+# Secrets, environment files
+.env
+# Compiled class files
+**/*.class
+# OS generated files
+.DS_Store
+Thumbs.db

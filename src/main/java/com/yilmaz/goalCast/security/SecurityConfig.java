@@ -73,17 +73,17 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4200",    // Angular için varsayılan (kalsın)
-                "http://127.0.0.1:5500",  // VS Code Live Server varsayılanı
-                "http://localhost:5500"   // VS Code Live Server alternatif (bazen localhost olarak da açabilir)
-                // Eğer Live Server farklı bir portta açılıyorsa, o portu buraya ekleyin.
+                "http://localhost:5500",       // Yerel VS Code Live Server
+                "http://127.0.0.1:5500",     // Yerel VS Code Live Server alternatif
+                "https://thegoalcast.netlify.app" // CANLI NETLIFY URL'NİZ
+                // Gerekirse custom domain'inizi de buraya eklersiniz
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control", "X-Requested-With", "Accept", "Origin"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true); // Credential'lara izin vermek önemli olabilir
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); // Tüm path'ler için geçerli
         return source;
     }
     

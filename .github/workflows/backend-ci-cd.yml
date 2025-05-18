@@ -6,10 +6,9 @@ on:
   workflow_dispatch: # Manuel olarak tetikleme imkanı da ekleyelim
 
 env:
-  # Bu değerleri kendi Azure kaynak adlarınızla değiştirin
-  AZURE_WEBAPP_NAME: goalcast-api                 # FAZ 3'te oluşturduğunuz App Service adı
-  AZURE_CONTAINER_REGISTRY_NAME: goalcastregistry # FAZ 2'de oluşturduğunuz ACR adı (sadece adı, .azurecr.io olmadan)
-  IMAGE_NAME: goalcast-backend                    # Docker imajınızın adı (ACR'deki)
+  AZURE_WEBAPP_NAME: goalcast-api
+  AZURE_CONTAINER_REGISTRY_NAME: goalcastregistry-fyfzauczb9e8fjet # <-- DEĞİŞİKLİK BURADA
+  IMAGE_NAME: goalcast-backend                # Docker imajınızın adı (ACR'deki)
 
 jobs:
   build-test-and-push-to-acr:

@@ -1,170 +1,140 @@
 # GoalCast - Futbol Tahmin Uygulaması
 
-
-GoalCast, kullanıcıların yaklaşan futbol maçları için skor tahminleri yapmalarını, bu tahminler üzerinden puan kazanmalarını ve bir rekabet ortamına dahil olmalarını sağlayan bir web uygulamasıdır.
+GoalCast, kullanıcıların yaklaşan futbol maçları için skor tahminleri yapmalarını, bu tahminler üzerinden puan kazanmalarını ve bir rekabet ortamına dahil olmalarını sağlayan kapsamlı bir web uygulamasıdır. Sistem, modern teknolojilerle geliştirilmiş olup, kullanıcılara etkileşimli ve eğlenceli bir deneyim sunmayı hedefler.
 
 **Canlı Demo (Frontend):** [https://thegoalcast.netlify.app](https://thegoalcast.netlify.app)
-**Canlı API (Backend):** `https://goalcast-api-ethxh9f4hngugwh9.germanywestcentral-01.azurewebsites.net/api` <!-- API ana adresiniz -->
+**Canlı API (Backend):** `https://goalcast-api-ethxh9f4hngugwh9.germanywestcentral-01.azurewebsites.net/api`
+**API Dokümantasyonu (Swagger UI):** `https://goalcast-api-ethxh9f4hngugwh9.germanywestcentral-01.azurewebsites.net/swagger-ui.html`
 
 ---
 
-## 📜 Projeye Genel Bakış
+## Projeye Genel Bakış
 
-Bu proje, futbolseverlere yönelik eğlenceli ve rekabetçi bir skor tahmin platformu sunmayı amaçlamaktadır. Kullanıcılar sisteme üye olup giriş yapabilir, ligleri ve maçları görüntüleyebilir, maçlar için skor tahmini yapabilir ve tahminlerinin sonuçlarına göre puan kazanabilirler. Ayrıca, admin kullanıcılar için lig ve maç yönetimi arayüzleri bulunmaktadır.
+GoalCast, futbolseverlere yönelik, kullanıcı dostu arayüzü ve gelişmiş özellikleriyle dikkat çeken bir skor tahmin platformudur. Kullanıcılar sisteme üye olabilir, e-posta adreslerini doğrulayabilir, giriş yapabilir, çeşitli liglerdeki maçları görüntüleyebilir, maçlar için skor tahmini yapabilir ve tahminlerinin sonuçlarına göre (belirlenen bir puanlama algoritması ile) puan kazanabilirler. Kullanıcılar ayrıca liderlik tablosunda diğerleriyle rekabet edebilir ve önemli olaylar (yeni maç eklenmesi, tahmin sonucu vb.) hakkında site içi ve e-posta yoluyla bildirim alabilirler. Admin rolüne sahip kullanıcılar için lig, maç yönetimi ve maç sonucu girme gibi kapsamlı yönetim arayüzleri de bulunmaktadır.
 
-### ✨ Temel Özellikler
+### Temel Özellikler
 
-*   Kullanıcı Kaydı ve Girişi (JWT ile kimlik doğrulama)
-*   Kullanıcı Profili Görüntüleme (Puan durumu vb.)
-*   Ligleri ve Maçları Listeleme
-*   Maç Skoru Tahmini Yapma
-*   Kullanıcının Kendi Tahminlerini Görmesi
+*   **Kullanıcı Yönetimi:**
+    *   Kullanıcı Kaydı ve Güvenli Giriş (JWT ile kimlik doğrulama)
+    *   E-posta Doğrulama Sistemi (RabbitMQ ve E-posta Servisi ile asenkron)
+    *   Kullanıcı Profili Görüntüleme (Puan durumu, e-posta doğrulama durumu vb.)
+*   **Tahmin Sistemi:**
+    *   Ligleri ve Yaklaşan Maçları Listeleme (Filtreleme seçenekleriyle)
+    *   Maçlar İçin Skor Tahmini Yapma (Puan yatırma mekanizması ile)
+    *   Kullanıcının Kendi Tahminlerini ve Sonuçlarını Görmesi
+    *   Detaylı Puanlama Algoritması (Doğru skor, doğru sonuç gibi farklı senaryolara göre puan kazanma/kaybetme)
+*   **Etkileşim ve Rekabet:**
+    *   Liderlik Tablosu
+    *   Kullanıcı Bildirim Sistemi (Site içi ve E-posta ile):
+        *   Yeni maç eklendiğinde (admin seçeneğine bağlı olarak tüm kullanıcılara e-posta)
+        *   Tahmin yapılan maç sonuçlandığında (kullanıcıya özel e-posta)
+        *   E-posta doğrulama süreçleri
 *   **Admin Paneli:**
-    *   Lig Oluşturma, Güncelleme, Silme (CRUD)
-    *   Maç Oluşturma, Güncelleme, Silme (CRUD)
-    *   Maç Sonucu Girme ve Tahminlerin Otomatik Değerlendirilmesi
+    *   Lig Yönetimi (Oluşturma, Güncelleme, Silme - CRUD)
+    *   Maç Yönetimi (Oluşturma, Güncelleme, Silme - CRUD)
+    *   Maç Sonucu Girme ve Tahminlerin Otomatik Değerlendirilip Puanların Güncellenmesi
+    *   Yeni maç eklerken tüm kullanıcılara e-posta ile bildirim gönderme seçeneği
 
 ---
 
-## 🚀 Kullanılan Teknolojiler
+## Kullanılan Teknolojiler
 
 ### Backend (GoalCast API - `goalcast-backend` Repository'si)
 
 *   **Programlama Dili:** Java 17+
 *   **Framework:** Spring Boot 3.x
-    *   Spring Web
-    *   Spring Security (JWT ile)
-    *   Spring Data JPA
-*   **Veritabanı:** PostgreSQL (Neon.tech üzerinde barındırılıyor)
-*   **ORM:** Hibernate
-*   **API Dokümantasyonu:** SpringDoc OpenAPI (Swagger UI)
-*   **Build Aracı:** Maven
-*   **Containerization:** Docker
-*   **Hosting:** Azure App Service (Web App for Containers)
-*   **Container Registry:** Azure Container Registry (ACR)
+    *   **Spring Web:** RESTful API geliştirme.
+    *   **Spring Security:** JWT tabanlı kimlik doğrulama ve yetkilendirme.
+    *   **Spring Data JPA:** Veritabanı etkileşimi ve ORM (Hibernate ile).
+    *   **Spring AMQP:** RabbitMQ ile asenkron mesajlaşma entegrasyonu.
+    *   **Spring Mail:** E-posta gönderim işlemleri.
+    *   **Spring AOP:** Mesajlaşma gibi kesitleri ilgilendiren (cross-cutting concerns) konular için hata yönetimi.
+*   **Veritabanı:** PostgreSQL (Canlı ortamda Neon.tech üzerinde barındırılıyor).
+*   **Mesaj Kuyruğu (Message Broker):** RabbitMQ (Canlı ortamda CloudAMQP üzerinde barındırılıyor).
+*   **API Dokümantasyonu:** SpringDoc OpenAPI (Swagger UI ile erişilebilir).
+*   **Build Aracı:** Apache Maven.
+*   **Containerization:** Docker.
+*   **Hosting:** Azure App Service (Web App for Containers).
+*   **Container Registry:** Azure Container Registry (ACR).
 
 ### Frontend (GoalCast UI - `goalcast-ui` Repository'si)
 
-*   **Temel Teknolojiler:** HTML5, CSS3, JavaScript (ES6+)
-*   **CSS Framework:** Bootstrap 5.x
-*   **JavaScript Mimarisi:** Vanilla JS ile modüler yapı, SPA (Single Page Application) benzeri hash tabanlı client-side routing.
-*   **Hosting:** Netlify
+*   **Temel Teknolojiler:** HTML5, CSS3, JavaScript (ES6+).
+*   **CSS Framework:** Bootstrap 5.x (Duyarlı ve modern arayüz bileşenleri için).
+*   **JavaScript Mimarisi:** Vanilla JS ile geliştirilmiş modüler yapı. Tek Sayfa Uygulaması (SPA) benzeri bir deneyim için hash tabanlı client-side routing mekanizması kullanılmaktadır.
+*   **Hosting:** Netlify.
 
 ### CI/CD (Sürekli Entegrasyon / Sürekli Dağıtım)
 
-*   **Platform:** GitHub Actions
-    *   Backend için: Maven build & test -> Docker image build -> ACR'ye push -> Azure App Service'e deploy.
-    *   Frontend için: Netlify'ın GitHub entegrasyonu ile otomatik deploy.
+*   **Platform:** GitHub Actions.
+    *   **Backend İçin:** `main` branch'ine yapılan her push, Maven ile build ve test süreçlerini tetikler. Başarılı olursa, bir Docker imajı oluşturulur, Azure Container Registry'ye (ACR) push'lanır ve son olarak Azure App Service'e deploy edilir.
+    *   **Frontend İçin:** Netlify'ın GitHub ile entegrasyonu sayesinde, `goalcast-ui` reposunun `main` branch'ine yapılan her push otomatik olarak canlı siteyi günceller.
 
 ---
 
-## 🛠️ Kurulum ve Çalıştırma (Yerel Geliştirme Ortamı)
+## Canlı Ortam Mimarisi ve Yapılandırma
 
-### Gereksinimler
+*   **Frontend (`goalcast-ui`):** Netlify üzerinde statik olarak barındırılır ve GitHub deposuyla senkronize bir şekilde otomatik olarak güncellenir.
+*   **Backend (`goalcast-backend`):** Azure App Service üzerinde bir Docker container'ı içinde çalışır. Docker imajları Azure Container Registry'de (ACR) saklanır. GitHub Actions ile CI/CD süreci yönetilir.
+*   **Veritabanı (`PostgreSQL`):** Neon.tech bulut veritabanı servisi üzerinde çalışır. Bağlantı bilgileri ve diğer hassas konfigürasyonlar Azure App Service ortam değişkenlerinde (Application settings) güvenli bir şekilde saklanır.
+*   **Mesaj Kuyruğu (`RabbitMQ`):** CloudAMQP bulut RabbitMQ servisi üzerinde çalışır. Bağlantı bilgileri Azure App Service ortam değişkenlerinde saklanır.
+*   **Hassas Bilgiler:** Veritabanı şifreleri, JWT secret'ı, RabbitMQ ve E-posta servis şifreleri gibi tüm hassas bilgiler, `application.properties` dosyası yerine Azure App Service ortam değişkenleri aracılığıyla uygulamaya sağlanır. `application.properties` dosyasında bu değerler için placeholder'lar kullanılır.
+*   **CORS:** Backend API, sadece canlı frontend (Netlify) ve yerel geliştirme ortamlarından gelen isteklere izin verecek şekilde yapılandırılmıştır. Bu ayar, Azure App Service ortam değişkeni (`ALLOWED_CORS_ORIGINS`) ile yönetilir.
+*   **Veritabanı Şeması (`ddl-auto`):** Canlı ortamda `spring.jpa.hibernate.ddl-auto` ayarı `validate` olarak ayarlanmıştır. Bu, Hibernate'in mevcut veritabanı şemasını entity sınıflarıyla karşılaştırmasını ve uyumsuzluk durumunda uygulamanın başlamasını engellemesini sağlar, böylece beklenmedik veri kaybı veya şema sorunlarının önüne geçilir. Yeni tablo veya sütun eklemeleri gibi şema değişiklikleri dikkatli bir şekilde (örneğin, `update` ayarıyla tek seferlik kontrollü bir çalıştırma veya migration araçlarıyla) yönetilir.
+
+---
+
+## Kurulum ve Çalıştırma (Yerel Geliştirme Ortamı)
+
+### Genel Gereksinimler
 
 *   Java JDK 17 veya üzeri
 *   Apache Maven 3.6 veya üzeri
-*   PostgreSQL veritabanı (yerel veya uzak)
-*   Node.js ve npm (Frontend için, eğer bağımlılık yönetimi veya build araçları kullanılacaksa - bu projede şu an için direkt tarayıcıda çalışıyor)
-*   Modern bir web tarayıcısı (Chrome, Firefox önerilir)
-*   Kod editörü (VS Code, IntelliJ IDEA vb.)
+*   PostgreSQL veritabanı (yerel kurulum veya Docker ile)
+*   RabbitMQ sunucusu (yerel kurulum veya Docker ile)
+*   Node.js ve npm (Frontend için herhangi bir build süreci olmasa da, genel web geliştirme araçları için faydalı olabilir)
+*   Modern bir web tarayıcısı (Google Chrome, Mozilla Firefox önerilir)
+*   Bir IDE veya kod editörü (IntelliJ IDEA, VS Code önerilir)
 
 ### Backend (`goalcast-backend`) Çalıştırma
 
-1.  Projeyi klonlayın:
+1.  **Projeyi Klonlayın:**
     ```bash
     git clone https://github.com/mahmutsyilmz/goalcast-backend.git
     cd goalcast-backend
     ```
-2.  `src/main/resources/application.properties` dosyasını yerel PostgreSQL veritabanı bilgilerinize göre düzenleyin:
-    ```properties
-    spring.datasource.url=jdbc:postgresql://localhost:5432/sizin_db_adiniz
-    spring.datasource.username=sizin_kullanici_adiniz
-    spring.datasource.password=sizin_sifreniz
-    # Diğer ayarlar...
-    ```
-3.  Uygulamayı Maven ile çalıştırın:
-    ```bash
-    mvn spring-boot:run
-    ```
-    API genellikle `http://localhost:8080/api` adresinde çalışmaya başlayacaktır.
-    Swagger UI: `http://localhost:8080/swagger-ui.html`
+2.  **Yerel Veritabanı ve RabbitMQ Kurulumu:**
+    *   Yerel makinenizde PostgreSQL ve RabbitMQ sunucularının kurulu ve çalışır durumda olduğundan emin olun.
+    *   RabbitMQ için varsayılan kullanıcı (`guest`) ve şifre (`guest`) genellikle yerel kurulumlarda çalışır.
+3.  **`application.properties` Dosyasını Düzenleyin:**
+    *   `src/main/resources/application.properties` dosyasını açın.
+    *   Yerel PostgreSQL bağlantı bilgileriniz (`spring.datasource.url`, `spring.datasource.username`, `spring.datasource.password`) için placeholder'ların `: ` sonrasındaki varsayılan değerleri kendi yerel ayarlarınızla güncelleyin veya bu placeholder'lara karşılık gelen ortam değişkenlerini sisteminizde tanımlayın.
+    *   Yerel RabbitMQ ayarlarınız (`spring.rabbitmq.host`, `spring.rabbitmq.port` vb.) için de benzer şekilde varsayılanları kontrol edin.
+    *   Yerel geliştirme için e-posta gönderme testi yapacaksanız, `spring.mail.username` ve `spring.mail.password` için geçerli bir Gmail (uygulama şifresi ile) veya başka bir SMTP hesabı ayarlayın.
+    *   `app.frontend.url` değerini yerel frontend adresinize ayarlayın (örn: `http://127.0.0.1:5500`).
+4.  **Uygulamayı Çalıştırın:**
+    *   IDE üzerinden Spring Boot uygulamasını çalıştırın veya terminalden:
+      ```bash
+      mvn spring-boot:run
+      ```
+    *   API genellikle `http://localhost:8080/api` adresinde çalışmaya başlayacaktır.
+    *   Swagger UI (API Dokümantasyonu): `http://localhost:8080/swagger-ui.html`
 
 ### Frontend (`goalcast-ui`) Çalıştırma
 
-1.  Projeyi klonlayın:
+1.  **Projeyi Klonlayın:**
     ```bash
     git clone https://github.com/mahmutsyilmz/goalcast-ui.git
     cd goalcast-ui
     ```
-2.  `js/api.js` dosyasındaki `BASE_URL` sabitini, çalışan backend API adresini gösterecek şekilde güncelleyin (eğer yerelde çalıştırıyorsanız `http://localhost:8080/api`).
-3.  Bir web sunucusu ile `index.html` dosyasını sunun. VS Code kullanıyorsanız "Live Server" eklentisi işinizi görecektir.
-    *   VS Code'da `index.html` dosyasına sağ tıklayıp "Open with Live Server" seçeneğini seçin.
-    Frontend genellikle `http://127.0.0.1:5500` (veya Live Server'ın verdiği port) adresinde açılacaktır.
+2.  **API Adresini Ayarlayın:**
+    *   `js/api.js` dosyasındaki `BASE_URL` sabitini, çalışan backend API adresini gösterecek şekilde güncelleyin. Yerel backend için bu genellikle `http://localhost:8080/api` olacaktır.
+3.  **Web Sunucusu ile Sunun:**
+    *   `index.html` dosyasını bir web sunucusu aracılığıyla sunmanız gerekir.
+    *   VS Code kullanıyorsanız, "Live Server" eklentisini kurup `index.html` dosyasına sağ tıklayıp "Open with Live Server" seçeneğini kullanabilirsiniz.
+    *   Frontend genellikle `http://127.0.0.1:5500` (veya Live Server'ın atadığı port) adresinde açılacaktır.
 
----
 
-## ☁️ Canlı Ortam Mimarisi
 
-*   **Frontend:** `goalcast-ui` reposu Netlify'a bağlıdır. `main` branch'ine yapılan her push otomatik olarak deploy edilir.
-*   **Backend:** `goalcast-backend` reposu için GitHub Actions workflow'u tanımlanmıştır. `main` branch'ine yapılan her push:
-    1.  Uygulamayı Maven ile build eder ve testleri çalıştırır.
-    2.  Bir Docker imajı oluşturur.
-    3.  Oluşturulan imajı Azure Container Registry'ye (ACR) push'lar.
-    4.  Azure App Service'i ACR'deki en son imajı kullanacak şekilde günceller.
-*   **Veritabanı:** Neon.tech üzerinde barındırılan PostgreSQL veritabanı kullanılır. Bağlantı bilgileri Azure App Service ortam değişkenlerinde saklanır.
 
----
 
-## 📁 Proje Yapısı
-
-### Backend (`goalcast-backend`)
-
-```
-goalcast-backend/
-  .github/
-    workflows/
-      backend-ci-cd.yml  # GitHub Actions workflow dosyası
-  src/
-    main/
-      java/
-        com/yilmaz/goalCast/  # Ana Java kaynak kodu
-          config/
-          controller/
-          # ... ve diğerleri ...
-      resources/
-        application.properties # Uygulama yapılandırması
-    test/
-      java/
-        com/yilmaz/goalCast/  # Test kaynak kodu
-  Dockerfile                 # Backend için Docker imajı oluşturma talimatları
-  .dockerignore              # Docker build'inde ignore edilecek dosyalar
-  pom.xml                    # Maven proje yapılandırması
-  README.md                  # Bu dosya
-```
-
-### Frontend (`goalcast-ui`)
-
-```
-goalcast-ui/
-├── css/
-│   └── style.css              # Özel CSS stilleri
-├── js/
-│   ├── api.js                 # Backend API iletişim fonksiyonları
-│   ├── app.js                 # Ana uygulama mantığı, SPA router
-│   ├── auth.js                # Kimlik doğrulama fonksiyonları
-│   ├── ui.js                  # Genel UI yardımcı fonksiyonları
-│   └── pages/                 # Sayfa-spesifik JavaScript dosyaları
-│       └── *.js               # (Örn: login-page.js, dashboard-page.js vb.)
-├── views/                     # HTML view parçacıkları
-│   └── *.html                 # (Örn: login.html, home.html vb.)
-├── .gitignore                 # Git ignore dosyası
-├── index.html                 # Ana HTML şablonu
-└── README.md                  # Bu dosya (veya projenin ana README'sine referans)
-```
-
-## 📝 Katkıda Bulunma
-
-Bu proje şu anda kişisel bir projedir. Katkıda bulunma veya geri bildirim için lütfen bir "Issue" açın.
-
----

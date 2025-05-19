@@ -26,7 +26,7 @@ public class User extends BaseEntity{
 
     private String profileImagePath;
 
-    @Column(nullable = false)
+    @Column(name = "email_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean emailVerified = false;
 
     private String emailVerificationToken;

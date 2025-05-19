@@ -25,4 +25,6 @@ public class MatchCreateRequestDto {
     @NotNull(message = "Match date is required")
     @FutureOrPresent(message = "Match date must be in the future")
     private LocalDateTime matchDate;
+
+    private boolean sendEmailNotification = false;
 }

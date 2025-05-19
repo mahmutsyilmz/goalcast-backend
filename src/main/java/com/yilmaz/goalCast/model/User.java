@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -23,6 +25,13 @@ public class User extends BaseEntity{
     private Role role;
 
     private String profileImagePath;
+
+    @Column(nullable = false)
+    private boolean emailVerified = false;
+
+    private String emailVerificationToken;
+
+    private LocalDateTime emailVerificationTokenExpiryDate;
 
 
 }

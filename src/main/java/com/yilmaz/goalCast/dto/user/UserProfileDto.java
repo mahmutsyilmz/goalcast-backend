@@ -13,5 +13,6 @@ public class UserProfileDto {
     private String email;
     private int totalPoints;
     private String role;
+    boolean emailVerified;
 
 }

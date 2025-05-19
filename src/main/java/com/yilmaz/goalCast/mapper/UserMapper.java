@@ -18,6 +18,7 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setTotalPoints(user.getTotalPoints());
         dto.setRole(user.getRole() != null ? user.getRole().name() : null);
+        dto.setEmailVerified(user.isEmailVerified());
         return dto;
     }
 }

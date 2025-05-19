@@ -64,13 +64,21 @@ public class PredictionServiceImpl implements PredictionService {
         prediction.setIsCorrect(null); // Sonuç açıklanınca doldurulacak
         prediction.setPointsWon(0);
 
+        user.setTotalPoints(user.getTotalPoints() - dto.getStakePoints());
+        User updatedUser = userRepository.save(user); // Güncellenmiş kullanıcıyı al
+
+        Prediction savedPrediction = predictionRepository.save(prediction);
+        PredictionDto predictionDto = predictionMapper.toDto(savedPrediction);
+
+        predictionDto.setUpdatedUserTotalPoints(updatedUser.getTotalPoints());
+
         // 7. Kullanıcı puanını düşür
         user.setTotalPoints(user.getTotalPoints() - dto.getStakePoints());
         userRepository.save(user);
 
         Prediction saved = predictionRepository.save(prediction);
 
-        return predictionMapper.toDto(saved);
+        return predictionDto;
     }
 
     @Override

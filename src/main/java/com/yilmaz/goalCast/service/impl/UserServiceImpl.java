@@ -40,4 +40,10 @@ public class UserServiceImpl implements UserService {
         }
         return leaderboard;
     }
+
+    //getUserById
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    }
 }

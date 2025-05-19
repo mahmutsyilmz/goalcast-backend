@@ -12,6 +12,7 @@ public class PredictionDto {
     private int predictedHomeScore;
     private int predictedAwayScore;
     private int stakePoints;
+    private Integer updatedUserTotalPoints;
     private Boolean isCorrect;
     private Integer pointsWon;
 }

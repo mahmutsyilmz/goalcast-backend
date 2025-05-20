@@ -10,4 +10,6 @@ public interface PredictionRepository extends JpaRepository<Prediction, Long> {
     boolean existsByUserIdAndMatchId(Long userId, Long matchId);
     List<Prediction> findByUserId(Long userId);
     List<Prediction> findByMatchId(Long matchId);
+
+    void deleteByUserId(Long userId);
 }

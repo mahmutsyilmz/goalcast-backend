@@ -1,9 +1,11 @@
 package com.yilmaz.goalCast.model;
 
-import jakarta.persistence.*; // VEYA javax.persistence.*
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
@@ -11,10 +13,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Notification extends BaseEntity { // BaseEntity'den id ve createdAt alabilir
+public class Notification extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @Column(nullable = false, length = 500)
@@ -22,15 +25,15 @@ public class Notification extends BaseEntity { // BaseEntity'den id ve createdAt
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    private NotificationType type; // Enum oluşturacağız
+    private NotificationType type;
 
     @Column(nullable = false)
     private boolean isRead = false;
 
-    private Long relatedEntityId; // İlgili maçın ID'si, tahminin ID'si vb.
+    private Long relatedEntityId;
 
     @Column(length = 255)
-    private String link; // Bildirime tıklandığında gidilecek frontend linki
+    private String link;
 
     public Notification(User user, String message, NotificationType type, String link, Long relatedEntityId) {
         this.user = user;

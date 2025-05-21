@@ -7,4 +7,5 @@ public class LeagueDto {
     private Long id;
     private String name;
     private String country;
+    private String leagueType;
 }

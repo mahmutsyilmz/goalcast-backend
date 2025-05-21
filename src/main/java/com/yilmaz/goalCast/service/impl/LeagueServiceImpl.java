@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class LeaguServiceImpl implements LeagueService {
+public class LeagueServiceImpl implements LeagueService {
 
     private final LeagueRepository leagueRepository;
     private final LeagueMapper leagueMapper;
@@ -49,5 +49,12 @@ public class LeaguServiceImpl implements LeagueService {
         League league = leagueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("League not found with id: " + id));
         leagueRepository.delete(league);
+    }
+
+    @Override
+    public LeagueDto getLeagueById(Long id) {
+        League league = leagueRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("League not found with id: " + id));
+        return leagueMapper.toDto(league);
     }
 }

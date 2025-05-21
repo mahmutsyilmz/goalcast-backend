@@ -1,4 +1,3 @@
-// src/main/java/com/yilmaz/goalCast/controller/user/LeagueController.java
 package com.yilmaz.goalCast.controller.user;
 
 import com.yilmaz.goalCast.dto.league.LeagueDto;
@@ -21,5 +20,11 @@ public class LeagueController {
     public ResponseEntity<ResponseDto<List<LeagueDto>>> getAllLeagues() {
         List<LeagueDto> list = leagueService.getAllLeagues();
         return ResponseEntity.ok(new ResponseDto<>("Leagues fetched", true, list));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDto<LeagueDto>> getLeagueById(@PathVariable Long id) {
+        LeagueDto league = leagueService.getLeagueById(id);
+        return ResponseEntity.ok(new ResponseDto<>("League fetched", true, league));
     }
 }

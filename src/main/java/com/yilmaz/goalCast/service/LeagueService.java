@@ -14,4 +14,6 @@ public interface LeagueService {
     LeagueDto createLeague(LeagueCreateRequestDto dto);
     LeagueDto updateLeague(Long id, LeagueUpdateRequestDto dto);
     void deleteLeague(Long id);
+
+    LeagueDto getLeagueById(Long id);
 }

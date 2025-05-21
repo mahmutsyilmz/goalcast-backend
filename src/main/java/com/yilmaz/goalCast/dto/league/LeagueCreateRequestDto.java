@@ -1,6 +1,7 @@
 package com.yilmaz.goalCast.dto.league;
 
 import com.yilmaz.goalCast.model.Country;
+import com.yilmaz.goalCast.model.LeagueType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,4 +18,7 @@ public class LeagueCreateRequestDto {
 
     @NotNull(message = "Country is required")
     private Country country;
+
+    @NotNull(message = "League type is required")
+    private LeagueType leagueType;
 }

@@ -18,6 +18,7 @@ public class LeagueMapper {
         dto.setId(league.getId());
         dto.setName(league.getName());
         dto.setCountry(league.getCountry().name());
+        dto.setLeagueType(league.getLeagueType().name());
         return dto;
     }
 
@@ -28,6 +29,7 @@ public class LeagueMapper {
         League league = new League();
         league.setName(dto.getName());
         league.setCountry(dto.getCountry());
+        league.setLeagueType(dto.getLeagueType());
         return league;
     }
 
@@ -37,5 +39,6 @@ public class LeagueMapper {
         }
         league.setName(dto.getName());
         league.setCountry(dto.getCountry());
+        league.setLeagueType(dto.getLeagueType());
     }
 }

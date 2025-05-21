@@ -3,6 +3,7 @@ package com.yilmaz.goalCast.controller.user;
 
 import com.yilmaz.goalCast.dto.match.MatchDto;
 import com.yilmaz.goalCast.dto.ResponseDto;
+import com.yilmaz.goalCast.model.LeagueType;
 import com.yilmaz.goalCast.service.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,10 +24,11 @@ public class MatchController {
     @GetMapping
     public ResponseEntity<ResponseDto<List<MatchDto>>> getUpcomingMatches(
             @RequestParam(required = false) Long leagueId,
+            @RequestParam(required = false) LeagueType leagueType,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
     ) {
-        List<MatchDto> list = matchService.getUpcomingMatches(leagueId, startDate, endDate);
+        List<MatchDto> list = matchService.getUpcomingMatches(leagueId, leagueType, startDate, endDate);
         return ResponseEntity.ok(new ResponseDto<>("Upcoming matches fetched", true, list));
     }
 

@@ -17,8 +17,18 @@ public class LeagueMapper {
         LeagueDto dto = new LeagueDto();
         dto.setId(league.getId());
         dto.setName(league.getName());
-        dto.setCountry(league.getCountry().name());
-        dto.setLeagueType(league.getLeagueType().name());
+
+        if (league.getCountry() != null) {
+            dto.setCountry(league.getCountry().name());
+        } else {
+            dto.setCountry(null);
+        }
+
+        if (league.getLeagueType() != null) {
+            dto.setLeagueType(league.getLeagueType().name());
+        } else {
+            dto.setLeagueType(null);
+        }
         return dto;
     }
 

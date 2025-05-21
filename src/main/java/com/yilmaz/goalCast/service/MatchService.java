@@ -5,6 +5,7 @@ import com.yilmaz.goalCast.dto.match.MatchCreateRequestDto;
 import com.yilmaz.goalCast.dto.match.MatchDto;
 import com.yilmaz.goalCast.dto.match.MatchResultUpdateDto;
 import com.yilmaz.goalCast.dto.match.MatchUpdateRequestDto;
+import com.yilmaz.goalCast.model.LeagueType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface MatchService {
 
     // Yeni eklenen: sadece bitmemiş maçlar
-    List<MatchDto> getUpcomingMatches(Long leagueId, LocalDateTime startDate, LocalDateTime endDate);
+    List<MatchDto> getUpcomingMatches(Long leagueId, LeagueType leagueType, LocalDateTime startDate, LocalDateTime endDate);
     List<MatchDto> getAllMatches();
     MatchDto createMatch(MatchCreateRequestDto dto);
     MatchDto updateMatch(Long id, MatchUpdateRequestDto dto);

@@ -9,10 +9,7 @@ import com.yilmaz.goalCast.dto.match.MatchUpdateRequestDto;
 import com.yilmaz.goalCast.exception.MessagingException; // ÖNEMLİ: Bunu yakalayacağız
 import com.yilmaz.goalCast.exception.ResourceNotFoundException;
 import com.yilmaz.goalCast.mapper.MatchMapper;
-import com.yilmaz.goalCast.model.League;
-import com.yilmaz.goalCast.model.Match;
-import com.yilmaz.goalCast.model.Prediction;
-import com.yilmaz.goalCast.model.User;
+import com.yilmaz.goalCast.model.*;
 import com.yilmaz.goalCast.repository.LeagueRepository;
 import com.yilmaz.goalCast.repository.MatchRepository;
 import com.yilmaz.goalCast.repository.PredictionRepository;
@@ -222,23 +219,25 @@ public class MatchServiceImpl implements MatchService {
 
 
     @Override
-    public List<MatchDto> getUpcomingMatches(Long leagueId, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<MatchDto> getUpcomingMatches(Long leagueId, LeagueType leagueType, LocalDateTime startDate, LocalDateTime endDate) {
         List<Match> matches;
-        logger.debug("Fetching upcoming matches with leagueId: {}, startDate: {}, endDate: {}", leagueId, startDate, endDate);
-
-        if (leagueId != null && startDate != null && endDate != null) {
-            matches = matchRepository.findByIsFinishedFalseAndLeagueIdAndMatchDateBetweenOrderByMatchDateAsc(
-                    leagueId, startDate, endDate);
+        if (leagueId != null && leagueType != null && startDate != null && endDate != null) {
+            matches = matchRepository.findByIsFinishedFalseAndLeagueIdAndLeague_LeagueTypeAndMatchDateBetweenOrderByMatchDateAsc(leagueId, leagueType, startDate, endDate);
+        } else if (leagueId != null && startDate != null && endDate != null) {
+            matches = matchRepository.findByIsFinishedFalseAndLeagueIdAndMatchDateBetweenOrderByMatchDateAsc(leagueId, startDate, endDate);
+        } else if (leagueType != null && startDate != null && endDate != null) {
+            matches = matchRepository.findByIsFinishedFalseAndLeague_LeagueTypeAndMatchDateBetweenOrderByMatchDateAsc(leagueType, startDate, endDate);
+        } else if (leagueId != null && leagueType != null) {
+            matches = matchRepository.findByIsFinishedFalseAndLeagueIdAndLeague_LeagueTypeOrderByMatchDateAsc(leagueId, leagueType);
         } else if (leagueId != null) {
             matches = matchRepository.findByIsFinishedFalseAndLeagueIdOrderByMatchDateAsc(leagueId);
+        } else if (leagueType != null) {
+            matches = matchRepository.findByIsFinishedFalseAndLeague_LeagueTypeOrderByMatchDateAsc(leagueType);
         } else if (startDate != null && endDate != null) {
             matches = matchRepository.findByIsFinishedFalseAndMatchDateBetweenOrderByMatchDateAsc(startDate, endDate);
         } else {
             matches = matchRepository.findByIsFinishedFalseOrderByMatchDateAsc();
         }
-        logger.info("Found {} upcoming matches matching criteria.", matches.size());
-        return matches.stream()
-                .map(matchMapper::toDto)
-                .collect(Collectors.toList());
+        return matches.stream().map(matchMapper::toDto).collect(Collectors.toList());
     }
 }

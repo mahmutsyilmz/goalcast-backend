@@ -16,7 +16,6 @@ public class LeagueCreateRequestDto {
     @Size(max = 100, message = "League name must be at most 100 characters")
     private String name;
 
-    @NotNull(message = "Country is required")
     private Country country;
 
     @NotNull(message = "League type is required")
